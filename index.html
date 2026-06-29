@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jasa Gambar Arsitektur & Struktur Teknik</title>
+    <title>Panel Order - Jasa Arsitek & Struktur</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
@@ -11,79 +11,89 @@
 
     <header>
         <div class="container">
-            <div class="logo">Studio<span>Desain</span></div>
-            <nav>
-                <ul>
-                    <li><a href="#home">Beranda</a></li>
-                    <li><a href="#layanan">Layanan</a></li>
-                    <li><a href="#portofolio">Portofolio</a></li>
-                    <li><a href="#kontak" class="btn-kontak">Hubungi Kami</a></li>
-                </ul>
-            </nav>
+            <div class="logo">Arch<span>Structure</span></div>
+            <nav><ul><li><a href="index.html">Kembali ke Beranda</a></li></ul></nav>
         </div>
     </header>
 
-    <section id="home" class="hero">
-        <div class="container hero-content">
-            <h1>Jasa Gambar Arsitektur &amp; Struktur Profesional</h1>
-            <p>Mengubah ide dan kebutuhan bangunan Anda menjadi denah AutoCAD, desain arsitektur, hingga visualisasi struktur teknik yang detail dan presisi.</p>
-            <a href="#kontak" class="cta-btn">Konsultasi Sekarang</a>
+    <section class="form-section">
+        <div class="container">
+            <h2>Formulir Pengajuan Proyek</h2>
+            <p>Isi detail di bawah ini untuk mendapatkan estimasi penawaran harga proporsional.</p>
+            
+            <form id="orderForm" class="order-form">
+                <div class="form-group">
+                    <label>Nama Lengkap :</label>
+                    <input type="text" id="nama" required placeholder="Masukkan nama Anda">
+                </div>
+                
+                <div class="form-group">
+                    <label>Nomor WhatsApp :</label>
+                    <input type="tel" id="whatsapp" required placeholder="Contoh: 085692102857">
+                </div>
+
+                <div class="form-group">
+                    <label>Jenis Layanan :</label>
+                    <select id="layanan">
+                        <option value="Arsitektur 2D">Desain Arsitektur &amp; Denah 2D (AutoCAD)</option>
+                        <option value="Struktur Teknik">Gambar Struktur Teknik (Baja/Beton)</option>
+                        <option value="Paket Komplit 3D">Paket Komplit + Visualisasi 3D</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Estimasi Luas Bangunan ($m^2$) :</label>
+                    <input type="number" id="luas" required placeholder="Contoh: 100">
+                </div>
+
+                <div class="form-group">
+                    <label>Catatan Tambahan / Detail Proyek :</label>
+                    <textarea id="catatan" rows="4" placeholder="Misal: Gudang struktur baja WF atau Ruko 2 lantai..."></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn">Kirim Pengajuan Proyek</button>
+            </form>
+            
+            <div id="responseMessage" class="message hidden"></div>
         </div>
     </section>
 
-    <section id="layanan" class="services">
-        <div class="container">
-            <h2 class="section-title">Layanan Kami</h2>
-            <div class="service-grid">
-                <div class="service-card">
-                    <h3>Desain Arsitektur</h3>
-                    <p>Pembuatan denah 2D ala AutoCAD, tampak bangunan, potongan, hingga konsep estetika bangunan yang fungsional.</p>
-                </div>
-                <div class="service-card">
-                    <h3>Gambar Struktur</h3>
-                    <p>Perencanaan teknis dan visualisasi struktur baja atau beton yang kokoh, detail, dan sesuai standar keamanan teknik.</p>
-                </div>
-                <div class="service-card">
-                    <h3>Visualisasi 3D</h3>
-                    <p>Pengembangan model 3D untuk memberikan gambaran nyata yang dramatis dan realistis dari proyek Anda sebelum dibangun.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+    <script>
+        document.getElementById('orderForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const orderData = {
+                nama: document.getElementById('nama').value,
+                whatsapp: document.getElementById('whatsapp').value,
+                layanan: document.getElementById('layanan').value,
+                luas: document.getElementById('luas').value,
+                catatan: document.getElementById('catatan').value
+            };
 
-    <section id="portofolio" class="portfolio">
-        <div class="container">
-            <h2 class="section-title">Hasil Kerja &amp; Portofolio</h2>
-            <p style="text-align: center; margin-bottom: 30px;">Berikut adalah beberapa konsep dan proyek gambar yang telah dikerjakan:</p>
-            <div class="portfolio-grid">
-                <div class="portfolio-item">
-                    <div class="portfolio-placeholder">Gambar Denah &amp; Arsitektur</div>
-                </div>
-                <div class="portfolio-item">
-                    <div class="portfolio-placeholder">Desain Struktur Teknik</div>
-                </div>
-                <div class="portfolio-item">
-                    <div class="portfolio-placeholder">Visualisasi 3D Proyek</div>
-                </div>
-            </div>
-        </div>
-    </section>
+            const responseMessage = document.getElementById('responseMessage');
 
-    <section id="kontak" class="contact">
-        <div class="container">
-            <h2 class="section-title">Mulai Proyek Anda</h2>
-            <p>Punya kebutuhan gambar arsitek, denah, atau perhitungan struktur? Hubungi kami untuk konsultasi gratis.</p>
-            <div class="contact-box">
-                <a href="https://wa.me/6285692102857" target="_blank" class="wa-btn">Hubungi via WhatsApp</a>
-            </div>
-        </div>
-    </section>
+            try {
+                const response = await fetch('/api/order', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(orderData)
+                });
 
-    <footer>
-        <div class="container">
-            <p>&copy; 2026 Jasa Desain Arsitektur &amp; Struktur. Semua Hak Dilindungi.</p>
-        </div>
-    </footer>
-
+                const result = await response.json();
+                
+                if(response.ok) {
+                    responseMessage.className = "message success";
+                    responseMessage.innerText = `Sukses! ${result.message}. Estimasi Harga: Rp ${result.estimasi.toLocaleString('id-ID')}`;
+                    document.getElementById('orderForm').reset();
+                } else {
+                    responseMessage.className = "message error";
+                    responseMessage.innerText = "Gagal mengirim pengajuan.";
+                }
+            } catch (error) {
+                responseMessage.className = "message error";
+                responseMessage.innerText = "Terjadi kesalahan jaringan.";
+            }
+        });
+    </script>
 </body>
 </html>
